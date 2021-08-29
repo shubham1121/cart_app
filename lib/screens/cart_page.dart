@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/cart.dart';
+
 class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -96,6 +98,7 @@ class _CartList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cartProvider = Provider.of<CartModel>(context); // created a cartProvider to call the CartModel functions
     return cart.items.isEmpty?Center(child: Text('Nothing Here!',style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),)) : ListView.builder(
       itemCount: cart.items.length,
       itemBuilder: (context, index) => ListTile(
@@ -104,7 +107,7 @@ class _CartList extends StatelessWidget {
         trailing: IconButton(
           icon: Icon(Icons.remove_circle_outline),
           onPressed: () {
-            cart.items.remove(cart.items[index]);
+            cartProvider.remove(cart.items[index]); // Fix
           },
         ),
       ),

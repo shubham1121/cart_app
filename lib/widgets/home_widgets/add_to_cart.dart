@@ -2,6 +2,7 @@ import 'package:first_app/models/cart.dart';
 import 'package:first_app/models/catalog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class AddToCart extends StatelessWidget {
@@ -12,13 +13,14 @@ class AddToCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cartProvider = Provider.of<CartModel>(context); // created a cartProvider to call the CartModel functions
     bool isInCart = cart.items.contains(catalog) ?  true:false;
     return ElevatedButton(
         onPressed: () {
           print("isInCart:$isInCart");
           if(!isInCart) {
             isInCart = !isInCart;
-            cart.items.add(catalog);
+            cartProvider.add(catalog); // Fixed
             cart.catalog = _catalog;
             print(cart.items.length);
           }
