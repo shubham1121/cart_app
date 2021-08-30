@@ -3,8 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class MyTheme{
-
-
   static ThemeData lightTheme(BuildContext context) => ThemeData(
     cardColor: Colors.white,
       canvasColor: creamColor,

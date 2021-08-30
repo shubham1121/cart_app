@@ -1,5 +1,6 @@
 import 'package:first_app/models/cart.dart';
 import 'package:first_app/screens/home_detail_page.dart';
+import 'package:first_app/widgets/catalog_image.dart';
 import 'package:first_app/widgets/home_widgets/add_to_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/models/catalog.dart';
@@ -44,7 +45,11 @@ class CatalogItem extends StatelessWidget {
         child: Row(
           children: [
             Hero(
-              child: CatalogImage(image: catalog.imageUrl),
+              child: CatalogImage(
+                image: catalog.imageUrl,
+                width: 135.0,
+                height: 135.0,
+              ),
               tag: Key(
                 catalog.id.toString(),
               ),
@@ -76,10 +81,6 @@ class CatalogItem extends StatelessWidget {
                         ),
                       ],
                     ),
-
-                    // SizedBox(
-                    //   height: 25,
-                    // ),
                     ButtonBar(
                       buttonPadding: EdgeInsets.zero,
                       alignment: MainAxisAlignment.spaceBetween,
@@ -92,7 +93,8 @@ class CatalogItem extends StatelessWidget {
                           ),
                         ),
                         Consumer<CartModel>(
-                          builder: (context,myCart,child)=> AddToCart(catalog: catalog,cart: myCart,),
+                          builder: (context, myCart, child) =>
+                              AddToCart(catalog: catalog),
                         ),
                       ],
                     ),
@@ -103,26 +105,6 @@ class CatalogItem extends StatelessWidget {
           ],
         ),
         height: 150,
-      ),
-    );
-  }
-}
-
-class CatalogImage extends StatelessWidget {
-  final String image;
-
-  const CatalogImage({Key? key, required this.image}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 135,
-      height: 135,
-      padding: EdgeInsets.all(8),
-      child: Image.network(image),
-      decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
-        borderRadius: BorderRadius.circular(5),
       ),
     );
   }

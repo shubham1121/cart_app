@@ -1,4 +1,5 @@
 import 'package:first_app/models/cart.dart';
+import 'package:first_app/widgets/catalog_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,12 +28,14 @@ class CartPage extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Consumer<CartModel>(
-                  builder:(context,myCart,child)=> _CartList(cart: myCart)),
+                    builder: (context, myCart, child) => _CartList()),
               ),
             ),
             Divider(),
             Consumer<CartModel>(
-              builder: (context,myCart,child)=> _CartTotal(cart: myCart,)),
+                builder: (context, myCart, child) => _CartTotal(
+                      cart: myCart,
+                    )),
           ],
         ),
       ),
@@ -92,25 +95,65 @@ class _CartTotal extends StatelessWidget {
 }
 
 class _CartList extends StatelessWidget {
-  final CartModel cart;
-
-  const _CartList({Key? key, required this.cart}) : super(key: key);
+  const _CartList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var cartProvider = Provider.of<CartModel>(context); // created a cartProvider to call the CartModel functions
-    return cart.items.isEmpty?Center(child: Text('Nothing Here!',style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),)) : ListView.builder(
-      itemCount: cart.items.length,
-      itemBuilder: (context, index) => ListTile(
-        leading: Icon(Icons.done),
-        title: Text('${cart.items[index].name}'),
-        trailing: IconButton(
-          icon: Icon(Icons.remove_circle_outline),
-          onPressed: () {
-            cartProvider.remove(cart.items[index]); // Fix
-          },
-        ),
-      ),
-    );
+    var cartProvider = Provider.of<CartModel>(
+        context); // created a cartProvider to call the CartModel functions
+    return cartProvider.items.isEmpty
+        ? Center(
+            child: Text(
+            'Nothing Here!',
+            style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+          ))
+        : ListView.builder(
+            itemCount: cartProvider.items.length,
+            itemBuilder: (context, index) => Card(
+                child: Container(
+              padding: EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).cardColor,
+              ),
+              child: Row(
+                children: [
+                  CatalogImage(
+                    image: cartProvider.items[index].imageUrl,
+                    width: 80.0,
+                    height: 80.0,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${cartProvider.items[index].name}'),
+                          IconButton(
+                            icon: Icon(Icons.remove_circle_outline),
+                            onPressed: () {
+                              cartProvider.remove(cartProvider.items[index]);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+          );
   }
 }
+
+// ListTile(
+// leading: CatalogImage(image: cartProvider.items[index].imageUrl,),
+// title: Text('${cartProvider.items[index].name}'),
+// trailing: IconButton(
+// icon: Icon(Icons.remove_circle_outline),
+// onPressed: () {
+// cartProvider.remove(cartProvider.items[index]); // Fix
+// },
+// ),
+// ),
