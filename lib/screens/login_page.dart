@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_app/utils/firebase_auth.dart';
 import 'package:first_app/utils/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +12,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool changedButton = false;
   final _formKey = GlobalKey<FormState>();
+  final _userEmailController = TextEditingController();
+  final _userPasswordController = TextEditingController();
   // try{
   //   UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: , password: )
   // }
@@ -20,11 +24,21 @@ class _LoginPageState extends State<LoginPage> {
         changedButton = true;
       });
       await Future.delayed(Duration(milliseconds: 290));
-      await Navigator.pushNamed(context, MyRoutes.homeRoute);
+      setState((){
+         context.read<AuthService>().loginUser(
+            email: _userEmailController.text,
+            password: _userPasswordController.text);
+      });
       setState(() {
         changedButton = false;
       });
     }
+  }
+  @override
+  void dispose() {
+    _userEmailController.dispose();
+    _userPasswordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -71,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: _userEmailController,
                           decoration: InputDecoration(
                             hintText: "Enter UserName",
                             labelText: "UserName",
@@ -83,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                         TextFormField(
+                          controller: _userPasswordController,
                           obscureText: true,
                           decoration: InputDecoration(
                             hintText: "Enter Password",

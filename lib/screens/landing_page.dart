@@ -4,6 +4,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:first_app/utils/routes.dart';
 class LandingPage extends StatefulWidget {
 
+
   @override
   _LandingPageState createState() => _LandingPageState();
 }

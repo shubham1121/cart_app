@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_app/utils/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:provider/src/provider.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -13,25 +15,19 @@ class _SignupPageState extends State<SignupPage> {
   final _userEmailController = TextEditingController();
   final _userPasswordController = TextEditingController();
 
-  void validateSignUp(BuildContext context) async {
+  Future<void> validateSignUp(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       print(_userEmailController.text);
       print(_userPasswordController.text);
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: _userEmailController.text,
-                password: _userPasswordController.text);
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print(e.code.toString());
-        } else if (e.code == 'email already in use') {
-          print(e.code.toString());
-        }
-      } catch (e) {
-        print(e);
-      }
+      await context.read<AuthService>().signUpUser(email:_userEmailController.text, password: _userPasswordController.text);
     }
+  }
+
+  @override
+  void dispose() {
+    _userEmailController.dispose();
+    _userPasswordController.dispose();
+    super.dispose();
   }
 
   @override
